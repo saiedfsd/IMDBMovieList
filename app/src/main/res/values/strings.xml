@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">MovieList</string>
+
+    <string name="txtSplashSubText">MOVIE LIST APPLICATION</string>
+    <string name="txtSplashTitle">IMDB</string>
+    <string name="btn_login">Login</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_password">Password</string>
+    <string name="some_error_desc">some error desc</string>
+    <string name="btn_signup">Sign-up</string>
+    <string name="btn_have_account">have account?</string>
+    <string name="btn_sign_up">Sign-up</string>
+    <string name="btn_sign_in">Sign-in</string>
+    <string name="btn_dont_have_account">do not have account? Sign-up</string>
 </resources>
