@@ -16,14 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieList"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AuthenticationActivity"></activity>
-        <activity android:name=".SplashActivity">
+        <activity android:name=".MovieListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AuthenticationActivity">
+        </activity>
+        <activity android:name=".SplashActivity"/>
     </application>
 
 </manifest>

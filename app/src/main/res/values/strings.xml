@@ -13,4 +13,12 @@
     <string name="btn_sign_up">Sign-up</string>
     <string name="btn_sign_in">Sign-in</string>
     <string name="btn_dont_have_account">do not have account? Sign-up</string>
+    <string name="search_hint">Search</string>
+
+    <string-array name="search_filters" >
+        <item>Title</item>
+        <item>Plot</item>
+        <item>Actors</item>
+        <item>Director</item>
+    </string-array>
 </resources>

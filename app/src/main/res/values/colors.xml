@@ -15,4 +15,7 @@
     <color name="colorBlackProgress">#424141</color>
     <color name="colorMainBg">#252525</color>
     <color name="colorErrorDesc">#f4511e</color>
+    <color name="colorSelect">#BC3333</color>
+    <color name="colorDeselect">#723E3B3B</color>
+    <color name="colorSearchBoxBg">#5EBCBCBC</color>
 </resources>
