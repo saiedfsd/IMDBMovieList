@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MovieDetailView">
+        <attr name="propertyNameColor" format="color" />
+        <attr name="propertyDescColor" format="color" />
+        <attr name="moviePropertyName" format="string" />
+        <attr name="moviePropertyDesc" format="string" />
+    </declare-styleable>
+
+</resources>

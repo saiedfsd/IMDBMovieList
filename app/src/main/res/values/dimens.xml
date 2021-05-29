@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="line_vertical_margin">5dp</dimen>
+    <dimen name="line_horizontal_margin">12dp</dimen>
+</resources>

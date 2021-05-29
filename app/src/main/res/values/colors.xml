@@ -18,4 +18,10 @@
     <color name="colorSelect">#BC3333</color>
     <color name="colorDeselect">#723E3B3B</color>
     <color name="colorSearchBoxBg">#5EBCBCBC</color>
+    <color name="colorGradientBlackStart">#E60C0C0C</color>
+    <color name="colorGradientBlackEnd">#00BCBCBC</color>
+    <color name="colorGradientBlackCenter">#95000000</color>
+    <color name="colorDeepOrange900">#271701</color>
+    <color name="colorSortItemsColor">#32302E</color>
+
 </resources>

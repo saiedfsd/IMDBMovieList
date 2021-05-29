@@ -21,4 +21,21 @@
         <item>Actors</item>
         <item>Director</item>
     </string-array>
+
+    <string name="sampleMovieName">The Dark Knight</string>
+    <string name="sampleMovieDesc">When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, the caped crusader must come to terms with one of the greatest psychological tests of his ability to fight injustice.</string>
+    <string name="sampleMovieActors">Christian Bale, Heath Ledger, Aaron Eckhart, Michael Caine</string>
+    <string name="sampleMovieDirector">Christopher Nolan</string>
+    <string name="sampleMovieWriter">Jonathan Nolan (screenplay), Christopher Nolan (screenplay), Christopher Nolan (story), David S. Goyer (story), Bob Kane (characters)</string>
+    <string name="sampleMovieGenres">Action,Crime,Drama</string>
+    <string name="sampleMovieCountry">USA, UK</string>
+
+    <string name="moviePropertyCountry">Country :</string>
+    <string name="moviePropertyDesc">Desc :</string>
+    <string name="moviePropertyActors">Actors :</string>
+    <string name="moviePropertyDirector">Director :</string>
+    <string name="moviePropertyWriter">Writer :</string>
+    <string name="moviePropertyGenres">Genres :</string>
+
+
 </resources>

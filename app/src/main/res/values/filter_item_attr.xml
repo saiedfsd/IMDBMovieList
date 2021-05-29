@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FilterItemView">
+        <attr name="defaultSelectionState" format="boolean" />
+        <attr name="selectColor" format="color" />
+        <attr name="deselectColor" format="color" />
+        <attr name="filterTitle" format="string" />
+    </declare-styleable>
+</resources>

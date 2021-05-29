@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
+    >
+
+    <data>
+<!--        <variable-->
+<!--            name="movie"-->
+<!--            type="MovieItem" />-->
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/action_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/colorSplashBg"
+            android:layoutDirection="ltr"
+            >
+
+            <ImageButton
+                android:id="@+id/btn_user"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginVertical="5dp"
+                android:layout_marginHorizontal="15dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/arrow_back_ico"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                app:tint="@color/black"
+                android:tintMode="src_in"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/action_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/g_h_3"
+                app:layout_constraintGuide_percent="0.3"
+
+                />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/images_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/g_h_3"
+
+                >
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/g2_v_05"
+                    app:layout_constraintGuide_percent="0.05"
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/g2_v_15"
+                    app:layout_constraintGuide_percent="0.15"
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/g2_h_05"
+                    app:layout_constraintGuide_percent="0.05"
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/g2_h_20"
+                    app:layout_constraintGuide_percent="0.20"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_movie_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/tt0111161_screenshot2"
+
+                    />
+
+                <ImageButton
+                    android:id="@+id/btn_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintLeft_toRightOf="@+id/g2_v_05"
+                    app:layout_constraintTop_toBottomOf="@+id/g2_h_05"
+                    app:layout_constraintBottom_toTopOf="@+id/g2_h_20"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/is_favorite"
+                    app:tint="@color/colorSplashBg"
+                    android:tintMode="src_in"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    />
+
+                <ImageButton
+                    android:id="@+id/btn_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintLeft_toRightOf="@+id/g2_v_15"
+                    app:layout_constraintTop_toBottomOf="@+id/g2_h_05"
+                    app:layout_constraintBottom_toTopOf="@+id/g2_h_20"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/share_ico"
+                    app:tint="@color/white"
+                    android:tintMode="src_in"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@+id/images_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@color/colorMainBg"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    >
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/movie_head"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        >
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/g3_v_05"
+                            app:layout_constraintGuide_percent="0.03"
+                            />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/g3_v_25"
+                            app:layout_constraintGuide_percent="0.25"
+                            />
+                        <ImageView
+                            android:id="@+id/img_movie_poster"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@+id/g3_v_25"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/tt0111161_poster"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"
+                            />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txt_pg"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toLeftOf="@+id/g3_v_25"
+                            android:background="@drawable/black_transparent_bg"
+                            android:text="PG-13"
+                            android:textSize="16sp"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:paddingVertical="3dp"
+                            />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toRightOf="@+id/g3_v_25"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:paddingHorizontal="10dp"
+
+                            >
+                            <androidx.constraintlayout.widget.Guideline
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:id="@+id/g4_h_5"
+                                app:layout_constraintGuide_percent="0.5"
+                                />
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txt_movie_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintBottom_toTopOf="@+id/g4_h_5"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="My Favorite Movie(2001)"
+                                android:textSize="16sp"
+                                android:textColor="@color/white"
+                                android:gravity="left"
+                                android:paddingVertical="3dp"
+                                android:singleLine="true"
+                                android:ellipsize="marquee"
+
+                                />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txt_release_time"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintRight_toLeftOf="@+id/txt_imdb_rate"
+                                app:layout_constraintTop_toBottomOf="@+id/g4_h_5"
+                                android:text="187 min"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="@color/white"
+                                android:gravity="left|bottom"
+                                android:paddingVertical="3dp"
+                                android:singleLine="true"
+                                />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txt_imdb_rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintRight_toLeftOf="@+id/img_rate_star"
+                                app:layout_constraintTop_toBottomOf="@+id/g4_h_5"
+                                android:text="8.6"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="@color/white"
+                                android:gravity="right|bottom"
+                                android:paddingVertical="3dp"
+                                android:singleLine="true"
+                                />
+
+                            <ImageView
+                                android:id="@+id/img_rate_star"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/star_rate_ico"
+                                android:scaleType="fitCenter"
+                                android:adjustViewBounds="true"
+                                android:layout_marginVertical="5dp"
+                                />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layoutDirection="ltr"
+                        android:layout_below="@+id/movie_head"
+                        android:paddingHorizontal="5dp"
+                        >
+
+                        <com.android.movielist.MovieDetailView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:moviePropertyName="@string/moviePropertyDesc"
+                            app:moviePropertyDesc="@string/sampleMovieDesc"
+                            app:propertyDescColor="@color/white"
+                            app:propertyNameColor="@color/white"
+                            />
+
+                        <com.android.movielist.MovieDetailView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:moviePropertyName="@string/moviePropertyDirector"
+                            app:moviePropertyDesc="@string/sampleMovieDirector"
+                            app:propertyDescColor="@color/white"
+                            app:propertyNameColor="@color/white"
+                            android:layout_marginTop="5dp"
+                            />
+
+                        <com.android.movielist.MovieDetailView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:moviePropertyName="@string/moviePropertyActors"
+                            app:moviePropertyDesc="@string/sampleMovieActors"
+                            app:propertyDescColor="@color/white"
+                            app:propertyNameColor="@color/white"
+                            android:layout_marginTop="5dp"
+                            />
+
+                        <com.android.movielist.MovieDetailView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:moviePropertyName="@string/moviePropertyWriter"
+                            app:moviePropertyDesc="@string/sampleMovieWriter"
+                            app:propertyDescColor="@color/white"
+                            app:propertyNameColor="@color/white"
+                            android:layout_marginTop="5dp"
+                            />
+
+                        <com.android.movielist.MovieDetailView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:moviePropertyName="@string/moviePropertyGenres"
+                            app:moviePropertyDesc="@string/sampleMovieGenres"
+                            app:propertyDescColor="@color/white"
+                            app:propertyNameColor="@color/white"
+                            android:layout_marginTop="5dp"
+                            />
+
+                        <com.android.movielist.MovieDetailView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:moviePropertyName="@string/moviePropertyCountry"
+                            app:moviePropertyDesc="@string/sampleMovieCountry"
+                            app:propertyDescColor="@color/white"
+                            app:propertyNameColor="@color/white"
+                            android:layout_marginTop="5dp"
+                            />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+
+            </androidx.core.widget.NestedScrollView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
