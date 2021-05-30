@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_deselect_bg"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:layoutDirection="ltr"
+    android:animateLayoutChanges="true"
+    >
+
+    <ImageButton
+        android:id="@+id/btn_deselect_filter"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/close"
+        app:tint="@color/colorSelect"
+        android:tintMode="src_in"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:visibility="visible"
+        android:layout_marginLeft="10dp"
+        android:layout_marginVertical="3dp"
+        android:enabled="false"
+        android:layout_gravity="center_vertical"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txt_filter_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textColor="@color/colorDeselect"
+        android:textSize="18sp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="3dp"
+        android:textStyle="normal"
+        android:enabled="false"
+        android:layout_gravity="center_vertical"
+        />
+
+ <!--   <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_deselect_bg"
+        android:paddingHorizontal="5dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+
+    </LinearLayout>-->
+
+</merge>
+

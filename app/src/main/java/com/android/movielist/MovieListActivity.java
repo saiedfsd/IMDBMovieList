@@ -3,16 +3,26 @@ package com.android.movielist;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
+import androidx.room.Room;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.android.movielist.databinding.ActivityMovieListBinding;
+import com.android.movielist.db.ImdbMoviesDB;
+import com.android.movielist.db.entities.GenreEntity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MovieListActivity extends AppCompatActivity {
 
@@ -53,6 +63,35 @@ public class MovieListActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ImdbMoviesDB db = Room
+                .databaseBuilder(getApplicationContext(), ImdbMoviesDB.class, "imdb.db")
+                .build();
+
+        db.genreDao().getGenreById(1)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<GenreEntity>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        Log.e("FSD","onSubscribe");
+                    }
+
+                    @Override
+                    public void onNext(@NonNull GenreEntity genreEntity) {
+                        Log.e("FSD","onNext");
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("FSD","onError :" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.e("FSD","onComplete");
+                    }
+                });
     }
 
 
