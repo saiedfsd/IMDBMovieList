@@ -1,14 +1,10 @@
 package com.android.movielist;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-public class FilterModel extends BaseObservable {
+public class FilterModel {
 
-    @Bindable
     private String filterName;
-
-    @Bindable
     private boolean isSelect;
 
     public FilterModel() {
@@ -20,7 +16,6 @@ public class FilterModel extends BaseObservable {
 
     public void setFilterName(String filterName) {
         this.filterName = filterName;
-        notifyPropertyChanged(BR.filterName);
     }
 
     public boolean isSelect() {
@@ -29,6 +24,5 @@ public class FilterModel extends BaseObservable {
 
     public void setIsSelect(boolean isSelect) {
         this.isSelect = isSelect;
-        notifyPropertyChanged(BR.isSelect);
     }
 }

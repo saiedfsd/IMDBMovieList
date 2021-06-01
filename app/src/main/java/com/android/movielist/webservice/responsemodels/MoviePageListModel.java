@@ -11,7 +11,7 @@ public class MoviePageListModel implements Serializable {
 
     @SerializedName("data")
     @Expose
-    private List<MovieModel> data = new ArrayList<>();
+    private List<MovieBaseModel> data = new ArrayList<>();
 
     @SerializedName("metadata")
     @Expose
@@ -20,17 +20,17 @@ public class MoviePageListModel implements Serializable {
     public MoviePageListModel() {
     }
 
-    public MoviePageListModel(List<MovieModel> data, MetaDataModel metadata) {
+    public MoviePageListModel(List<MovieBaseModel> data, MetaDataModel metadata) {
         super();
         this.data = data;
         this.metadata = metadata;
     }
 
-    public List<MovieModel> getData() {
+    public List<MovieBaseModel> getData() {
         return data;
     }
 
-    public void setData(List<MovieModel> data) {
+    public void setData(List<MovieBaseModel> data) {
         this.data = data;
     }
 

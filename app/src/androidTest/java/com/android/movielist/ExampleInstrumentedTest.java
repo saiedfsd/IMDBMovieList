@@ -36,8 +36,4 @@ public class ExampleInstrumentedTest {
         assertEquals("com.android.movielist", appContext.getPackageName());
     }
 
-    @Test
-    public void getRetrofitInstance(){
-
-    }
 }

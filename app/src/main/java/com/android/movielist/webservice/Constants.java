@@ -8,7 +8,7 @@ public class Constants {
     public static final String PATH_WEB_SERVICE_VERSION = "v1/";
     public static final String PATH_MOVIES = "movies/";
     public static final String PATH_OAUTH = "oauth/";
-    public static final String PATH_TOKEN = "token";
+    public static final String PATH_TOKEN = "token/";
     public static final String PATH_REGISTER = "register/";
     public static final String PATH_GENRES = "genres/";
     public static final String PATH_USER = "user/";

@@ -7,19 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieModel implements Serializable {
-    @SerializedName("id")
-    @Expose
-    private int id;
-    @SerializedName("title")
-    @Expose
-    private String title;
-    @SerializedName("poster")
-    @Expose
-    private String poster;
-    @SerializedName("year")
-    @Expose
-    private String year;
+public class MovieModel extends MovieBaseModel implements Serializable {
+
     @SerializedName("rated")
     @Expose
     private String rated;
@@ -41,18 +30,12 @@ public class MovieModel implements Serializable {
     @SerializedName("plot")
     @Expose
     private String plot;
-    @SerializedName("country")
-    @Expose
-    private String country;
     @SerializedName("awards")
     @Expose
     private String awards;
     @SerializedName("metascore")
     @Expose
     private String metascore;
-    @SerializedName("imdb_rating")
-    @Expose
-    private String imdbRating;
     @SerializedName("imdb_votes")
     @Expose
     private String imdbVotes;
@@ -62,12 +45,6 @@ public class MovieModel implements Serializable {
     @SerializedName("type")
     @Expose
     private String type;
-    @SerializedName("genres")
-    @Expose
-    private List<String> genres = new ArrayList<>();
-    @SerializedName("images")
-    @Expose
-    private List<String> images = new ArrayList<>();
 
 
     public MovieModel() {
@@ -75,11 +52,7 @@ public class MovieModel implements Serializable {
     }
 
     public MovieModel(int id, String title, String poster, String year, String rated, String released, String runtime, String director, String writer, String actors, String plot, String country, String awards, String metascore, String imdbRating, String imdbVotes, String imdbId, String type, List<String> genres, List<String> images) {
-        super();
-        this.id = id;
-        this.title = title;
-        this.poster = poster;
-        this.year = year;
+        super(id,title,poster,year,country,imdbRating,genres,images);
         this.rated = rated;
         this.released = released;
         this.runtime = runtime;
@@ -87,47 +60,11 @@ public class MovieModel implements Serializable {
         this.writer = writer;
         this.actors = actors;
         this.plot = plot;
-        this.country = country;
         this.awards = awards;
         this.metascore = metascore;
-        this.imdbRating = imdbRating;
         this.imdbVotes = imdbVotes;
         this.imdbId = imdbId;
         this.type = type;
-        this.genres = genres;
-        this.images = images;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getPoster() {
-        return poster;
-    }
-
-    public void setPoster(String poster) {
-        this.poster = poster;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
     }
 
     public String getRated() {
@@ -186,14 +123,6 @@ public class MovieModel implements Serializable {
         this.plot = plot;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getAwards() {
         return awards;
     }
@@ -208,14 +137,6 @@ public class MovieModel implements Serializable {
 
     public void setMetascore(String metascore) {
         this.metascore = metascore;
-    }
-
-    public String getImdbRating() {
-        return imdbRating;
-    }
-
-    public void setImdbRating(String imdbRating) {
-        this.imdbRating = imdbRating;
     }
 
     public String getImdbVotes() {
@@ -242,41 +163,25 @@ public class MovieModel implements Serializable {
         this.type = type;
     }
 
-    public List<String> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(MovieModel.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("id");
         sb.append('=');
-        sb.append(this.id);
+        sb.append(getId());
         sb.append(',');
         sb.append("title");
         sb.append('=');
-        sb.append(((this.title == null)?"<null>":this.title));
+        sb.append(((getTitle() == null)?"<null>":getTitle()));
         sb.append(',');
         sb.append("poster");
         sb.append('=');
-        sb.append(((this.poster == null)?"<null>":this.poster));
+        sb.append(((getPoster() == null)?"<null>":getPoster()));
         sb.append(',');
         sb.append("year");
         sb.append('=');
-        sb.append(((this.year == null)?"<null>":this.year));
+        sb.append(((getYear() == null)?"<null>":getYear()));
         sb.append(',');
         sb.append("rated");
         sb.append('=');
@@ -308,7 +213,7 @@ public class MovieModel implements Serializable {
         sb.append(',');
         sb.append("country");
         sb.append('=');
-        sb.append(((this.country == null)?"<null>":this.country));
+        sb.append(((getCountry() == null)?"<null>":getCountry()));
         sb.append(',');
         sb.append("awards");
         sb.append('=');
@@ -320,7 +225,7 @@ public class MovieModel implements Serializable {
         sb.append(',');
         sb.append("imdbRating");
         sb.append('=');
-        sb.append(((this.imdbRating == null)?"<null>":this.imdbRating));
+        sb.append(((getImdbRating() == null)?"<null>":getImdbRating()));
         sb.append(',');
         sb.append("imdbVotes");
         sb.append('=');
@@ -336,11 +241,11 @@ public class MovieModel implements Serializable {
         sb.append(',');
         sb.append("genres");
         sb.append('=');
-        sb.append(((this.genres == null)?"<null>":this.genres));
+        sb.append(((getGenres() == null)?"<null>":getGenres()));
         sb.append(',');
         sb.append("images");
         sb.append('=');
-        sb.append(((this.images == null)?"<null>":this.images));
+        sb.append(((getImages() == null)?"<null>":getImages()));
         sb.append(',');
         if (sb.charAt((sb.length()- 1)) == ',') {
             sb.setCharAt((sb.length()- 1), ']');
