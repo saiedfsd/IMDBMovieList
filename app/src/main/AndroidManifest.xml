@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,16 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieList"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MovieListActivity">
+        <activity android:name=".activities.MovieListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AuthenticationActivity">
+        <activity android:name=".activities.AuthenticationActivity">
         </activity>
-        <activity android:name=".SplashActivity"/>
+        <activity android:name=".activities.SplashActivity"/>
     </application>
 
 </manifest>

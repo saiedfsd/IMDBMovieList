@@ -290,7 +290,7 @@
                     android:paddingHorizontal="5dp"
                     >
 
-                    <com.android.movielist.MovieDetailView
+                    <com.android.movielist.costumview.MovieDetailView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:moviePropertyName="@string/moviePropertyDesc"
@@ -299,7 +299,7 @@
                         app:propertyNameColor="@color/white"
                         />
 
-                    <com.android.movielist.MovieDetailView
+                    <com.android.movielist.costumview.MovieDetailView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:moviePropertyName="@string/moviePropertyDirector"
@@ -309,7 +309,7 @@
                         android:layout_marginTop="5dp"
                         />
 
-                    <com.android.movielist.MovieDetailView
+                    <com.android.movielist.costumview.MovieDetailView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:moviePropertyName="@string/moviePropertyActors"
@@ -319,7 +319,7 @@
                         android:layout_marginTop="5dp"
                         />
 
-                    <com.android.movielist.MovieDetailView
+                    <com.android.movielist.costumview.MovieDetailView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:moviePropertyName="@string/moviePropertyWriter"
@@ -329,7 +329,7 @@
                         android:layout_marginTop="5dp"
                         />
 
-                    <com.android.movielist.MovieDetailView
+                    <com.android.movielist.costumview.MovieDetailView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:moviePropertyName="@string/moviePropertyGenres"
@@ -339,7 +339,7 @@
                         android:layout_marginTop="5dp"
                         />
 
-                    <com.android.movielist.MovieDetailView
+                    <com.android.movielist.costumview.MovieDetailView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:moviePropertyName="@string/moviePropertyCountry"
