@@ -1,4 +1,4 @@
-package com.android.movielist;
+package com.android.movielist.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.room.Room;
 
+import com.android.movielist.App;
+import com.android.movielist.R;
 import com.android.movielist.db.ImdbMoviesDB;
 import com.android.movielist.db.entities.GenreEntity;
 import com.android.movielist.webservice.Constants;

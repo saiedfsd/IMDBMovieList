@@ -1,8 +1,10 @@
-package com.android.movielist;
+package com.android.movielist.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.android.movielist.R;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.android.movielist;
+package com.android.movielist.costumview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
+
+import com.android.movielist.R;
 
 public class MovieDetailView extends ConstraintLayout {
 
