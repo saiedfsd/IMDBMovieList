@@ -7,5 +7,6 @@ public interface IMovieItemActionListener {
 
     void onShareMovieItem(MovieBaseModel movieModel);
     void onFavoriteMovieItem(MovieBaseModel movieModel, int position);
+    void onMovieItemClickListener(MovieBaseModel movieModel, int position);
 
 }

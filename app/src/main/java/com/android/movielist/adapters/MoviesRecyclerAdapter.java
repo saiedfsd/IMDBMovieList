@@ -20,6 +20,7 @@ import com.android.movielist.webservice.responsemodels.MovieBaseModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,8 +32,8 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     private Context context;
     private IMovieItemActionListener itemActionListener;
 
-    public MoviesRecyclerAdapter(IMovieItemActionListener itemActionListener,List<MovieBaseModel> movieModels, Context context) {
-        this.movieModels = movieModels;
+    public MoviesRecyclerAdapter(IMovieItemActionListener itemActionListener, Context context) {
+        this.movieModels = new ArrayList<>();
         this.context = context;
         this.itemActionListener = itemActionListener;
     }
@@ -66,6 +67,14 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
             }
         });
 
+        holder.imgPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemActionListener != null)
+                    itemActionListener.onMovieItemClickListener(movieModels.get(position),position);
+            }
+        });
+
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -94,8 +103,13 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
         return movieModels.size();
     }
 
-    public void loadMoreMovies(List<MovieBaseModel> moreMovies){
+    public void loadMovies(List<MovieBaseModel> moreMovies){
         movieModels.addAll(moreMovies);
+        notifyDataSetChanged();
+    }
+
+    public void removeMovieItems(){
+        movieModels.clear();
         notifyDataSetChanged();
     }
 
