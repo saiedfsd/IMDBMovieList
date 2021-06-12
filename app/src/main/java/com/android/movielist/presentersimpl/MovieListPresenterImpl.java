@@ -1,14 +1,23 @@
 package com.android.movielist.presentersimpl;
 
+import com.android.movielist.models.MovieListModel;
 import com.android.movielist.presenters.IMovieListPresenter;
 import com.android.movielist.views.MovieListView;
 import com.android.movielist.webservice.responsemodels.GenreModel;
+import com.android.movielist.webservice.responsemodels.MovieBaseModel;
+
+import javax.inject.Inject;
 
 public class MovieListPresenterImpl implements IMovieListPresenter {
 
-    public MovieListView movieListView;
-    
+    private MovieListView movieListView;
+    private MovieListModel movieListModel;
 
+    @Inject
+    public MovieListPresenterImpl(MovieListView movieListView,MovieListModel movieListModel) {
+        this.movieListView = movieListView;
+        this.movieListModel = movieListModel;
+    }
 
     @Override
     public void getGenres() {
@@ -38,6 +47,12 @@ public class MovieListPresenterImpl implements IMovieListPresenter {
     @Override
     public void getMoreMovies() {
 
+    }
+
+    @Override
+    public void changeFavoriteState(MovieBaseModel value) {
+
+        movieListView.updateMovieFavoriteUI(value);
     }
 
     @Override

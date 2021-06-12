@@ -6,7 +6,7 @@ import com.android.movielist.di.components.AppComponent;
 import com.android.movielist.di.components.DaggerAppComponent;
 import com.android.movielist.di.modules.ApplicationModule;
 
-public class App extends Application {
+public class App extends Application{
 
     private AppComponent appComponent;
 

@@ -1,5 +1,7 @@
 package com.android.movielist.di.modules;
 
+import com.android.movielist.di.scops.AppScope;
+import com.android.movielist.utilities.NetworkStateReceiver;
 import com.android.movielist.webservice.Constants;
 import com.android.movielist.webservice.apiservices.MovieApiService;
 
@@ -17,13 +19,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetworkModule {
 
-    @Singleton
+    @AppScope
     @Provides
     public MovieApiService provideMovieApi(Retrofit retrofit) {
         return retrofit.create(MovieApiService.class);
     }
 
-    @Singleton
+    @AppScope
     @Provides
     public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
@@ -33,7 +35,7 @@ public class NetworkModule {
                 .build();
     }
 
-    @Singleton
+    @AppScope
     @Provides
     public OkHttpClient provideOkHttpClient(Interceptor interceptor) {
 
@@ -44,11 +46,17 @@ public class NetworkModule {
     }
 
 
-    @Singleton
+    @AppScope
     @Provides
     public Interceptor provideInterceptor() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return interceptor;
+    }
+
+    @AppScope
+    @Provides
+    public NetworkStateReceiver provideNetworkStateReceiver(){
+        return new NetworkStateReceiver();
     }
 }

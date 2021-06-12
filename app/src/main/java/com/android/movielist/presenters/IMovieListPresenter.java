@@ -1,6 +1,7 @@
 package com.android.movielist.presenters;
 
 import com.android.movielist.webservice.responsemodels.GenreModel;
+import com.android.movielist.webservice.responsemodels.MovieBaseModel;
 
 public interface IMovieListPresenter extends IBasePresenter {
 
@@ -10,5 +11,5 @@ public interface IMovieListPresenter extends IBasePresenter {
     void sortMovieList();
     void getMoviesByGenre(GenreModel genre);
     void getMoreMovies();
-
+    void changeFavoriteState(MovieBaseModel value);
 }

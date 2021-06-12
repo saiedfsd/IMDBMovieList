@@ -9,6 +9,7 @@ import com.android.movielist.db.dao.GenreDao;
 import com.android.movielist.db.dao.ImagesDao;
 import com.android.movielist.db.dao.MovieDao;
 import com.android.movielist.db.dao.PosterDao;
+import com.android.movielist.di.scops.AppScope;
 
 import javax.inject.Singleton;
 
@@ -18,7 +19,7 @@ import dagger.Provides;
 @Module
 public class DataBaseModule {
 
-    @Singleton
+    @AppScope
     @Provides
     public ImdbMoviesDB provideRoomDataBase(Context context){
         return Room
@@ -26,25 +27,25 @@ public class DataBaseModule {
                 .build();
     }
 
-    @Singleton
+    @AppScope
     @Provides
     public GenreDao provideGenreDao(ImdbMoviesDB database){
         return database.genreDao();
     }
 
-    @Singleton
+    @AppScope
     @Provides
     public ImagesDao provideImagesDao(ImdbMoviesDB database){
         return database.imagesDao();
     }
 
-    @Singleton
+    @AppScope
     @Provides
     public MovieDao provideMovieDao(ImdbMoviesDB database){
         return database.movieDao();
     }
 
-    @Singleton
+    @AppScope
     @Provides
     public PosterDao providePosterDao(ImdbMoviesDB database){
         return database.posterDao();

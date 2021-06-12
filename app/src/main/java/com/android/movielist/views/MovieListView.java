@@ -11,4 +11,6 @@ public interface MovieListView {
     void addMoviesToList(List<MovieBaseModel> movieModels);
     void loadGenres(List<GenreModel> genreModels);
     void reloadMovieList(List<MovieBaseModel> movieModels);
+
+    void updateMovieFavoriteUI(MovieBaseModel value);
 }

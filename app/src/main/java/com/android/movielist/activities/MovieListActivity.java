@@ -18,15 +18,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.movielist.App;
-import com.android.movielist.presenters.IMovieListPresenter;
-import com.android.movielist.views.MovieListView;
 import com.android.movielist.R;
 import com.android.movielist.adapters.GenreListAdapter;
 import com.android.movielist.adapters.MoviesRecyclerAdapter;
-import com.android.movielist.db.ImdbMoviesDB;
+import com.android.movielist.di.components.DaggerMovieListComponent;
+import com.android.movielist.di.modules.MovieListModule;
 import com.android.movielist.interfaces.IMovieItemActionListener;
-import com.android.movielist.webservice.apiservices.MovieApiService;
+import com.android.movielist.presenters.IMovieListPresenter;
+import com.android.movielist.views.MovieListView;
 import com.android.movielist.webservice.responsemodels.GenreModel;
 import com.android.movielist.webservice.responsemodels.MovieBaseModel;
 
@@ -96,20 +95,17 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
         }
     };
 
-    @Inject
-    public ImdbMoviesDB database;
-
-    @Inject
-    public MovieApiService movieApiService;
-
     private boolean filtersIsCollapsed = true;
     private long PERIOD = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ((App)getApplicationContext()).getAppComponent().injectActivity(this);
+        DaggerMovieListComponent.builder()
+                .movieListModule(new MovieListModule(this))
+                .build()
+        .injectActivity(this);
+
         super.onCreate(savedInstanceState);
-//        AndroidInjection.inject(this);
         setContentView(R.layout.activity_movie_list);
         ButterKnife.bind(this);
 
@@ -160,7 +156,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
             @Override
             public void onNext(String s) {
                 Log.e("fsd",s);
-//                sendRequestToServer(s);
+                movieListPresenter.searchMovie(s);
             }
             @Override
             public void onError(Throwable e) {
@@ -216,7 +212,15 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
 
             @Override
             public void onNext(MovieBaseModel value) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        String.format("%s (%s) \n %s \n %s" , value.getTitle(),value.getYear(),value.getCountry(),value.getImdbRating())
+                );
+                shareIntent.setType("text/plain");
 
+                shareMovie(shareIntent);
             }
 
             @Override
@@ -274,7 +278,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
 
                     @Override
                     public void onNext(MovieBaseModel value) {
-
+                        movieListPresenter.changeFavoriteState(value);
                     }
 
                     @Override
@@ -541,5 +545,10 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
             recyclerViewMovie.setAdapter(moviesRecyclerAdapter);
 
         moviesRecyclerAdapter.loadMovies(movieModels);
+    }
+
+    @Override
+    public void updateMovieFavoriteUI(MovieBaseModel value) {
+
     }
 }
