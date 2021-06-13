@@ -5,6 +5,7 @@ import com.android.movielist.db.dao.ImagesDao;
 import com.android.movielist.db.dao.MovieDao;
 import com.android.movielist.db.dao.PosterDao;
 import com.android.movielist.models.MovieListModel;
+import com.android.movielist.mvpcontracts.MovieListActivityContract;
 import com.android.movielist.webservice.apiservices.MovieApiService;
 import com.android.movielist.webservice.responsemodels.GenreModel;
 import com.android.movielist.webservice.responsemodels.MovieModel;
@@ -14,15 +15,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.schedulers.Schedulers;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieListModelImpl implements MovieListModel {
+public class MovieListModelImpl implements MovieListActivityContract.Model {
 
     public GenreDao genreDao;
     public ImagesDao ImagesDao;
@@ -46,8 +49,8 @@ public class MovieListModelImpl implements MovieListModel {
 
 
     @Override
-    public Observable<MoviePageListModel> getMovies() {
-        Call<MoviePageListModel> call = movieApiService.getMoviesListByPage(0);
+    public Observable<MoviePageListModel> getMovies(int pageNumber) {
+        Call<MoviePageListModel> call = movieApiService.getMoviesListByPage(pageNumber);
         Observable<MoviePageListModel> observable = Observable.create(new ObservableOnSubscribe<MoviePageListModel>() {
             @Override
             public void subscribe(ObservableEmitter<MoviePageListModel> e) throws Exception {
@@ -71,7 +74,7 @@ public class MovieListModelImpl implements MovieListModel {
                     }
                 });
             }
-        }).observeOn(Schedulers.io()).subscribeOn(Schedulers.io());
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
         
         return observable;
     }
@@ -82,7 +85,7 @@ public class MovieListModelImpl implements MovieListModel {
     }
 
     @Override
-    public Observable<List<GenreModel>> getGetGenres() {
+    public Observable<List<GenreModel>> getGenres() {
         return null;
     }
 

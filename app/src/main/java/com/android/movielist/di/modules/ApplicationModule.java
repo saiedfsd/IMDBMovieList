@@ -1,23 +1,20 @@
 package com.android.movielist.di.modules;
 
 import android.content.Context;
+
+import com.android.movielist.App;
+
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class ApplicationModule {
 
-    public Context context;
-
-    public ApplicationModule(Context context){
-        this.context = context;
+    public ApplicationModule(){
     }
 
     @Provides
-    public Context provideContext(){
-        return context;
+    public Context provideContext(App application) {
+        return application.getApplicationContext();
     }
-
-    /*@ContributesAndroidInjector
-    abstract MovieListActivity contributeActivityInjector();*/
 }

@@ -7,7 +7,8 @@ import com.android.movielist.webservice.responsemodels.MoviePageListModel;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
+
 
 public interface MovieListModel {
 

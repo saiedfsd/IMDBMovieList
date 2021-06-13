@@ -41,7 +41,7 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     @Override
     public MovieBaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.item_movie,parent);
+                .inflate(R.layout.item_movie,parent,false);
 
         return new MovieBaseViewHolder(view);
     }
@@ -50,7 +50,7 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     public void onBindViewHolder(@NonNull MoviesRecyclerAdapter.MovieBaseViewHolder holder, int position) {
         holder.movieRate.setText(movieModels.get(position).getImdbRating());
         String title = String.format("%s (%s)",movieModels.get(position).getTitle(),movieModels.get(position).getYear());
-        holder.movieRate.setText(title);
+        holder.movieTitle.setText(title);
 
         holder.btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,12 +84,15 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                 holder.imgPoster.setImageDrawable(errorDrawable);
+                holder.imgPoster.setColorFilter(context.getResources().getColor(R.color.colorSearchBoxBg));
+
                 Log.e("fsd",e.getMessage());
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
                 holder.imgPoster.setImageDrawable(placeHolderDrawable);
+                holder.imgPoster.setColorFilter(context.getResources().getColor(R.color.colorSearchBoxBg));
             }
         };
         Picasso.get().load(movieModels.get(position).getPoster()).error(R.drawable.image_holder)
@@ -114,21 +117,19 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     }
 
     class MovieBaseViewHolder extends RecyclerView.ViewHolder{
-
-        @BindView(R.id.txt_movie_rate)
         AppCompatTextView movieRate;
-        @BindView(R.id.txt_movie_title)
         AppCompatTextView movieTitle;
-        @BindView(R.id.btn_share)
         ImageButton btnShare;
-        @BindView(R.id.btn_favorite)
         ImageButton btnFavorite;
-        @BindView(R.id.img_movie_poster)
         ImageView imgPoster;
 
         public MovieBaseViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            movieRate = itemView.findViewById(R.id.txt_movie_rate);
+            movieTitle = itemView.findViewById(R.id.txt_movie_title);
+            btnShare = itemView.findViewById(R.id.btn_share);
+            btnFavorite = itemView.findViewById(R.id.btn_favorite);
+            imgPoster = itemView.findViewById(R.id.img_movie_poster);
         }
     }
 }

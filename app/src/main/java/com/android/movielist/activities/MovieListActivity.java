@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
@@ -18,14 +19,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.movielist.BuildConfig;
 import com.android.movielist.R;
 import com.android.movielist.adapters.GenreListAdapter;
 import com.android.movielist.adapters.MoviesRecyclerAdapter;
-import com.android.movielist.di.components.DaggerMovieListComponent;
-import com.android.movielist.di.modules.MovieListModule;
 import com.android.movielist.interfaces.IMovieItemActionListener;
-import com.android.movielist.presenters.IMovieListPresenter;
-import com.android.movielist.views.MovieListView;
+import com.android.movielist.mvpcontracts.MovieListActivityContract;
 import com.android.movielist.webservice.responsemodels.GenreModel;
 import com.android.movielist.webservice.responsemodels.MovieBaseModel;
 
@@ -36,6 +35,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -48,14 +48,16 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
-public class MovieListActivity extends AppCompatActivity implements MovieListView {
+public class MovieListActivity extends AppCompatActivity implements MovieListActivityContract.View {
 
 
     @Inject
-    public IMovieListPresenter movieListPresenter;
+    public MovieListActivityContract.Presenter movieListPresenter;
 
     @BindView(R.id.btn_collapse_filters)
     public ImageButton btnFiltersCollapse;
+    @BindView(R.id.no_data_parent)
+    public ConstraintLayout emptyListMessage;
     @BindView(R.id.btn_sort)
     public ImageButton btnSort;
     @BindView(R.id.btn_genres)
@@ -100,11 +102,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DaggerMovieListComponent.builder()
-                .movieListModule(new MovieListModule(this))
-                .build()
-        .injectActivity(this);
-
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
         ButterKnife.bind(this);
@@ -358,8 +356,34 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
             movieRecyclerLayoutManager = new GridLayoutManager(this,
                     (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)?3:6);
 
-        if (recyclerViewMovie.getLayoutManager() == null)
+        if (recyclerViewMovie.getLayoutManager() == null){
             recyclerViewMovie.setLayoutManager(movieRecyclerLayoutManager);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            recyclerViewMovie.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    int visibleItemCount = movieRecyclerLayoutManager.getChildCount();
+                    int totalItemCount = movieRecyclerLayoutManager.getItemCount();
+                    int pastVisibleItems = movieRecyclerLayoutManager.findFirstVisibleItemPosition();
+                    if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+//                            movieListPresenter.getMovies();
+                        Log.e("fsd","end 23");
+                    }
+                }
+            });
+        }else{
+            recyclerViewMovie.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                        Log.e("fsd","end <23");
+                    }
+                }
+            });
+        }
     }
 
     private void showGenresDialog(List<GenreModel> genreModels){
@@ -374,15 +398,20 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
                 TextView txtAllGenres = genreDialog.findViewById(R.id.txt_all_genres);
                 RecyclerView recyclerGenres = genreDialog.findViewById(R.id.recycler_genres);
                 ImageButton btnClose = genreDialog.findViewById(R.id.btn_close_dialog);
-                GridLayoutManager genresRecyclerLayoutManager = new GridLayoutManager(MovieListActivity.this,2);;
+
+                GridLayoutManager genresRecyclerLayoutManager = new GridLayoutManager(
+                        MovieListActivity.this,2);;
                 genresRecyclerLayoutManager.setSpanCount(2);
                 recyclerGenres.setLayoutManager(genresRecyclerLayoutManager);
-                GenreListAdapter listAdapter = new GenreListAdapter(genreDialog.getContext(), new GenreListAdapter.IGenreItemSelectionListener() {
+
+                GenreListAdapter listAdapter = new GenreListAdapter(genreDialog.getContext(),
+                        new GenreListAdapter.IGenreItemSelectionListener() {
                     @Override
                     public void onGenreItemSelect(GenreModel genreModel) {
 
                     }
                 });
+
                 recyclerGenres.setAdapter(listAdapter);
                 listAdapter.loadGenres(genreModels);
 
@@ -524,6 +553,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
         if (recyclerViewMovie.getAdapter() == null)
             recyclerViewMovie.setAdapter(moviesRecyclerAdapter);
 
+
         moviesRecyclerAdapter.loadMovies(movieModels);
 
     }
@@ -550,5 +580,23 @@ public class MovieListActivity extends AppCompatActivity implements MovieListVie
     @Override
     public void updateMovieFavoriteUI(MovieBaseModel value) {
 
+    }
+
+    @Override
+    public void showEmptyListMessage() {
+        if (emptyListMessage.getVisibility() == View.GONE)
+            emptyListMessage.setVisibility(View.VISIBLE);
+
+        if (recyclerViewMovie.getVisibility() == View.VISIBLE)
+            recyclerViewMovie.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showMovieList() {
+        if (emptyListMessage.getVisibility() == View.VISIBLE)
+            emptyListMessage.setVisibility(View.GONE);
+
+        if (recyclerViewMovie.getVisibility() == View.GONE)
+            recyclerViewMovie.setVisibility(View.VISIBLE);
     }
 }

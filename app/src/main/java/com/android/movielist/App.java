@@ -1,26 +1,35 @@
 package com.android.movielist;
 
+import android.app.Activity;
 import android.app.Application;
 
-import com.android.movielist.di.components.AppComponent;
+
 import com.android.movielist.di.components.DaggerAppComponent;
-import com.android.movielist.di.modules.ApplicationModule;
 
-public class App extends Application{
+import javax.inject.Inject;
 
-    private AppComponent appComponent;
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasAndroidInjector;
+
+public class App extends Application implements HasAndroidInjector{
+
+    @Inject
+    public DispatchingAndroidInjector<Object> appDispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        appComponent = DaggerAppComponent.builder()
-                .applicationModule(new ApplicationModule(getApplicationContext()))
-                .build();
-        appComponent.inject(this);
+        DaggerAppComponent
+                .builder()
+                .applicationContext(this)
+                .build()
+                .inject(this);
     }
 
-    public AppComponent getAppComponent() {
-        return appComponent;
+    @Override
+    public AndroidInjector<Object> androidInjector() {
+        return appDispatchingAndroidInjector;
     }
-
 }
