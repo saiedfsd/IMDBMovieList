@@ -45,6 +45,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
@@ -360,10 +362,11 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
             recyclerViewMovie.setLayoutManager(movieRecyclerLayoutManager);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             recyclerViewMovie.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    Log.e("fsd","end 23");
                     int visibleItemCount = movieRecyclerLayoutManager.getChildCount();
                     int totalItemCount = movieRecyclerLayoutManager.getItemCount();
                     int pastVisibleItems = movieRecyclerLayoutManager.findFirstVisibleItemPosition();
@@ -374,16 +377,49 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
                 }
             });
         }else{
-            recyclerViewMovie.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
-                        Log.e("fsd","end <23");
+        }*/
+
+        Observable<Boolean> scrollListen = Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
+                recyclerViewMovie.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                        if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                            if (!e.isDisposed()){
+                                e.onNext(true);
+                            }
+                        }
                     }
-                }
-            });
-        }
+                });
+
+            }
+        }).subscribeOn(Schedulers.single()).subscribeOn(Schedulers.io());
+
+        scrollListen.subscribe(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposables.add(d);
+            }
+
+            @Override
+            public void onNext(Boolean value) {
+                Log.e("fsd",value.toString());
+                movieListPresenter.getMovies();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("fsd",e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
     }
 
     private void showGenresDialog(List<GenreModel> genreModels){

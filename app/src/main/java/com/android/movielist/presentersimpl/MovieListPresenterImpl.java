@@ -15,9 +15,12 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MovieListPresenterImpl implements MovieListActivityContract.Presenter {
@@ -27,6 +30,7 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
     private CompositeDisposable compositeDisposable;
     private MetaDataModel lastReceivedMoviePageMetaData;
     private List<MovieBaseModel> allMovies;
+    private boolean isLoading;
 
     @Inject
     public MovieListPresenterImpl(MovieListActivityContract.View movieListView,
@@ -44,6 +48,9 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
 
     @Override
     public void getMovies() {
+        if (isLoading)
+            return;
+
         int pageNumber = 0;
         if(lastReceivedMoviePageMetaData != null)
             if (Integer.parseInt(lastReceivedMoviePageMetaData.getCurrentPage()) < lastReceivedMoviePageMetaData.getPageCount())
@@ -51,7 +58,52 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
             else
                 return;
 
-        movieListModel.getMovies(pageNumber)
+        isLoading = true;
+
+       /* movieListModel.getMovies(pageNumber)
+                .concatMap(new Function<MoviePageListModel, Observable<MoviePageListModel>>() {
+
+                    @Override
+                    public Observable<MoviePageListModel> apply(MoviePageListModel response) {
+                        return Observable.fromArray(response);
+                    }
+
+                })
+                .subscribe(new Observer<MoviePageListModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull MoviePageListModel moviePageListModel) {
+                        lastReceivedMoviePageMetaData = moviePageListModel.getMetadata();
+
+                        if (allMovies.size() > 0)
+                            movieListView.addMoviesToList(moviePageListModel.getData());
+                        else {
+                            movieListView.reloadMovieList(moviePageListModel.getData());
+                        }
+                        allMovies.addAll(moviePageListModel.getData());
+
+                        movieListView.showMovieList();
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("fsd",e.getMessage());
+                        movieListView.showEmptyListMessage();
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        isLoading = false;
+                    }
+                });*/
+
+       /* */movieListModel.getMovies(pageNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MoviePageListModel>() {
@@ -66,23 +118,25 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
 
                         if (allMovies.size() > 0)
                             movieListView.addMoviesToList(moviePageListModel.getData());
-                        else
+                        else {
                             movieListView.reloadMovieList(moviePageListModel.getData());
-
+                        }
                         allMovies.addAll(moviePageListModel.getData());
 
                         movieListView.showMovieList();
+                        isLoading = false;
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Log.e("fsd",e.getMessage());
                         movieListView.showEmptyListMessage();
+                        isLoading = false;
                     }
 
                     @Override
                     public void onComplete() {
-
+                        isLoading = false;
                     }
                 });
 
@@ -90,6 +144,97 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
 
     @Override
     public void searchMovie(String keyword) {
+        if (isLoading)
+            return;
+
+        int pageNumber = 0;
+        if(lastReceivedMoviePageMetaData != null)
+            if (Integer.parseInt(lastReceivedMoviePageMetaData.getCurrentPage()) < lastReceivedMoviePageMetaData.getPageCount())
+                pageNumber = Integer.parseInt(lastReceivedMoviePageMetaData.getCurrentPage()) + 1;
+            else
+                return;
+
+        isLoading = true;
+
+       /* movieListModel.getMovies(pageNumber)
+                .concatMap(new Function<MoviePageListModel, Observable<MoviePageListModel>>() {
+
+                    @Override
+                    public Observable<MoviePageListModel> apply(MoviePageListModel response) {
+                        return Observable.fromArray(response);
+                    }
+
+                })
+                .subscribe(new Observer<MoviePageListModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull MoviePageListModel moviePageListModel) {
+                        lastReceivedMoviePageMetaData = moviePageListModel.getMetadata();
+
+                        if (allMovies.size() > 0)
+                            movieListView.addMoviesToList(moviePageListModel.getData());
+                        else {
+                            movieListView.reloadMovieList(moviePageListModel.getData());
+                        }
+                        allMovies.addAll(moviePageListModel.getData());
+
+                        movieListView.showMovieList();
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("fsd",e.getMessage());
+                        movieListView.showEmptyListMessage();
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        isLoading = false;
+                    }
+                });*/
+
+        /* */movieListModel.getMovies(pageNumber,keyword)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MoviePageListModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull MoviePageListModel moviePageListModel) {
+                        lastReceivedMoviePageMetaData = moviePageListModel.getMetadata();
+
+                        if (allMovies.size() > 0)
+                            movieListView.addMoviesToList(moviePageListModel.getData());
+                        else {
+                            movieListView.reloadMovieList(moviePageListModel.getData());
+                        }
+                        allMovies.addAll(moviePageListModel.getData());
+
+                        movieListView.showMovieList();
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("fsd",e.getMessage());
+                        movieListView.showEmptyListMessage();
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        isLoading = false;
+                    }
+                });
 
     }
 

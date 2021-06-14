@@ -14,7 +14,7 @@ public interface MovieListActivityContract {
     interface Model {
 
         Observable<MoviePageListModel> getMovies(int pageNumber);
-        Observable<MoviePageListModel> getMovies(String s);
+        Observable<MoviePageListModel> getMovies(int pageNumber,String s);
         Observable<List<GenreModel>> getGenres();
         Observable<MovieModel> getMovie(int movieId);
     }

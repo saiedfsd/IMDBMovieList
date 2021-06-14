@@ -20,7 +20,9 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableEmitter;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import kotlin.jvm.functions.Function1;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,8 +52,20 @@ public class MovieListModelImpl implements MovieListActivityContract.Model {
 
     @Override
     public Observable<MoviePageListModel> getMovies(int pageNumber) {
+        /*return movieApiService.getMoviesListByPage(pageNumber)
+                .concatMap(new Function<MoviePageListModel, Observable<MoviePageListModel>>() {
+                    @Override
+                    public Observable<MoviePageListModel> apply(MoviePageListModel moviePageListModel) throws Throwable {
+                        if (Integer.parseInt(moviePageListModel.getMetadata().getCurrentPage()) == moviePageListModel.getMetadata().getPageCount()) {
+                            return Observable.just(moviePageListModel);
+                        }
+                        return Observable.just(moviePageListModel)
+                                .concatWith(getMovies(Integer.parseInt(moviePageListModel.getMetadata().getCurrentPage()) + 1));
+                    }
+                });*/
         Call<MoviePageListModel> call = movieApiService.getMoviesListByPage(pageNumber);
-        Observable<MoviePageListModel> observable = Observable.create(new ObservableOnSubscribe<MoviePageListModel>() {
+        Observable<MoviePageListModel> observable = Observable
+                .create(new ObservableOnSubscribe<MoviePageListModel>() {
             @Override
             public void subscribe(ObservableEmitter<MoviePageListModel> e) throws Exception {
                 call.enqueue(new Callback<MoviePageListModel>() {
@@ -75,13 +89,40 @@ public class MovieListModelImpl implements MovieListActivityContract.Model {
                 });
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        
+
         return observable;
     }
 
     @Override
-    public Observable<MoviePageListModel> getMovies(String s) {
-        return null;
+    public Observable<MoviePageListModel> getMovies(int pageNumber,String s) {
+        Call<MoviePageListModel> call = movieApiService.searchInMoviesByKeyword(pageNumber,s);
+        Observable<MoviePageListModel> observable = Observable
+                .create(new ObservableOnSubscribe<MoviePageListModel>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<MoviePageListModel> e) throws Exception {
+                        call.enqueue(new Callback<MoviePageListModel>() {
+                            @Override
+                            public void onResponse(Call<MoviePageListModel> call, Response<MoviePageListModel> response) {
+                                if (!e.isDisposed()){
+                                    if (response.isSuccessful() && response.code() == 200){
+                                        e.onNext(response.body());
+                                    }else{
+                                        e.onError(new Throwable());
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<MoviePageListModel> call, Throwable t) {
+                                if (!e.isDisposed()){
+                                    e.onError(t);
+                                }
+                            }
+                        });
+                    }
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+
+        return observable;
     }
 
     @Override
