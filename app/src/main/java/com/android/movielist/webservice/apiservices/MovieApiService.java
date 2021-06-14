@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -45,8 +46,11 @@ public interface MovieApiService {
     Call<ResponseBody> getUserData(@Header(Constants.PARAM_KEY_AUTHORIZATION) String authorization,
                                    @Header(Constants.PARAM_KEY_ACCEPT) String accept);
 
-    @GET(Constants.PATH_API + Constants.PATH_WEB_SERVICE_VERSION + Constants.PATH_MOVIES)
+  /*  @GET(Constants.PATH_API + Constants.PATH_WEB_SERVICE_VERSION + Constants.PATH_MOVIES)
     Call<MoviePageListModel> getMoviesListByPage(@Query(Constants.PARAM_KEY_PAGE) int pageNumber);
+*/
+    @GET(Constants.PATH_API + Constants.PATH_WEB_SERVICE_VERSION + Constants.PATH_MOVIES)
+    Single<MoviePageListModel> getMoviesListByPage(@Query(Constants.PARAM_KEY_PAGE) int pageNumber);
 
     @GET(Constants.PATH_API + Constants.PATH_WEB_SERVICE_VERSION + Constants.PATH_MOVIES)
     Call<MoviePageListModel> searchInMoviesByKeyword (@Query(Constants.PARAM_KEY_PAGE) int pageNumber,
