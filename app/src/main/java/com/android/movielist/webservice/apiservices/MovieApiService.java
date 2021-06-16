@@ -50,7 +50,7 @@ public interface MovieApiService {
     Call<MoviePageListModel> getMoviesListByPage(@Query(Constants.PARAM_KEY_PAGE) int pageNumber);
 */
     @GET(Constants.PATH_API + Constants.PATH_WEB_SERVICE_VERSION + Constants.PATH_MOVIES)
-    Single<MoviePageListModel> getMoviesListByPage(@Query(Constants.PARAM_KEY_PAGE) int pageNumber);
+    Call<MoviePageListModel> getMoviesListByPage(@Query(Constants.PARAM_KEY_PAGE) int pageNumber);
 
     @GET(Constants.PATH_API + Constants.PATH_WEB_SERVICE_VERSION + Constants.PATH_MOVIES)
     Call<MoviePageListModel> searchInMoviesByKeyword (@Query(Constants.PARAM_KEY_PAGE) int pageNumber,

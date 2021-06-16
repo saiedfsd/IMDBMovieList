@@ -12,6 +12,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.paging.PagingDataAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.movielist.R;
@@ -19,6 +21,8 @@ import com.android.movielist.interfaces.IMovieItemActionListener;
 import com.android.movielist.webservice.responsemodels.MovieBaseModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +36,11 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     private Context context;
     private IMovieItemActionListener itemActionListener;
 
-    public MoviesRecyclerAdapter(IMovieItemActionListener itemActionListener, Context context) {
-        this.movieModels = new ArrayList<>();
+    public MoviesRecyclerAdapter(/*@NotNull DiffUtil.ItemCallback<MovieBaseModel> diffCallback,*/
+                                 List<MovieBaseModel> movieModels,
+                                 Context context,
+                                 IMovieItemActionListener itemActionListener) {
+        this.movieModels = movieModels;
         this.context = context;
         this.itemActionListener = itemActionListener;
     }
@@ -48,8 +55,9 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
 
     @Override
     public void onBindViewHolder(@NonNull MoviesRecyclerAdapter.MovieBaseViewHolder holder, int position) {
-        holder.movieRate.setText(movieModels.get(position).getImdbRating());
-        String title = String.format("%s (%s)",movieModels.get(position).getTitle(),movieModels.get(position).getYear());
+        MovieBaseModel movie = movieModels.get(position);
+        holder.movieRate.setText(movie.getImdbRating());
+        String title = String.format("%s (%s)",movie.getTitle(),movie.getYear());
         holder.movieTitle.setText(title);
 
         holder.btnShare.setOnClickListener(new View.OnClickListener() {

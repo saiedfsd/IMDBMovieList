@@ -2,6 +2,8 @@ package com.android.movielist.presentersimpl;
 
 import android.util.Log;
 
+import androidx.paging.PagingData;
+
 import com.android.movielist.mvpcontracts.MovieListActivityContract;
 import com.android.movielist.webservice.responsemodels.GenreModel;
 import com.android.movielist.webservice.responsemodels.MetaDataModel;
@@ -31,6 +33,7 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
     private MetaDataModel lastReceivedMoviePageMetaData;
     private List<MovieBaseModel> allMovies;
     private boolean isLoading;
+    private String lastKeyword = "";
 
     @Inject
     public MovieListPresenterImpl(MovieListActivityContract.View movieListView,
@@ -43,13 +46,42 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
 
     @Override
     public void getGenres() {
+        movieListModel.getGenres()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<GenreModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onNext(@NonNull List<GenreModel> genreModels) {
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
-    public void getMovies() {
+    public void getMovies(String keyword) {
         if (isLoading)
             return;
+
+        if (!keyword.equals(lastKeyword)) {
+            lastKeyword = keyword;
+            lastReceivedMoviePageMetaData = null;
+            allMovies.clear();
+        }
 
         int pageNumber = 0;
         if(lastReceivedMoviePageMetaData != null)
@@ -60,50 +92,7 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
 
         isLoading = true;
 
-       /* movieListModel.getMovies(pageNumber)
-                .concatMap(new Function<MoviePageListModel, Observable<MoviePageListModel>>() {
-
-                    @Override
-                    public Observable<MoviePageListModel> apply(MoviePageListModel response) {
-                        return Observable.fromArray(response);
-                    }
-
-                })
-                .subscribe(new Observer<MoviePageListModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull MoviePageListModel moviePageListModel) {
-                        lastReceivedMoviePageMetaData = moviePageListModel.getMetadata();
-
-                        if (allMovies.size() > 0)
-                            movieListView.addMoviesToList(moviePageListModel.getData());
-                        else {
-                            movieListView.reloadMovieList(moviePageListModel.getData());
-                        }
-                        allMovies.addAll(moviePageListModel.getData());
-
-                        movieListView.showMovieList();
-                        isLoading = false;
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e("fsd",e.getMessage());
-                        movieListView.showEmptyListMessage();
-                        isLoading = false;
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        isLoading = false;
-                    }
-                });*/
-
-       /* */movieListModel.getMovies(pageNumber)
+        movieListModel.getMovies(pageNumber,lastKeyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MoviePageListModel>() {
@@ -139,7 +128,6 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
                         isLoading = false;
                     }
                 });
-
     }
 
     @Override
@@ -156,50 +144,7 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
 
         isLoading = true;
 
-       /* movieListModel.getMovies(pageNumber)
-                .concatMap(new Function<MoviePageListModel, Observable<MoviePageListModel>>() {
-
-                    @Override
-                    public Observable<MoviePageListModel> apply(MoviePageListModel response) {
-                        return Observable.fromArray(response);
-                    }
-
-                })
-                .subscribe(new Observer<MoviePageListModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull MoviePageListModel moviePageListModel) {
-                        lastReceivedMoviePageMetaData = moviePageListModel.getMetadata();
-
-                        if (allMovies.size() > 0)
-                            movieListView.addMoviesToList(moviePageListModel.getData());
-                        else {
-                            movieListView.reloadMovieList(moviePageListModel.getData());
-                        }
-                        allMovies.addAll(moviePageListModel.getData());
-
-                        movieListView.showMovieList();
-                        isLoading = false;
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e("fsd",e.getMessage());
-                        movieListView.showEmptyListMessage();
-                        isLoading = false;
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        isLoading = false;
-                    }
-                });*/
-
-        /* */movieListModel.getMovies(pageNumber,keyword)
+        movieListModel.getMovies(pageNumber,keyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MoviePageListModel>() {
@@ -261,7 +206,8 @@ public class MovieListPresenterImpl implements MovieListActivityContract.Present
 
     @Override
     public void onCreate() {
-        getMovies();
+
+        getMovies(lastKeyword);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.android.movielist.mvpcontracts;
 
+import androidx.paging.PagingData;
+
 import com.android.movielist.presenters.IBasePresenter;
 import com.android.movielist.webservice.responsemodels.GenreModel;
 import com.android.movielist.webservice.responsemodels.MovieBaseModel;
@@ -22,7 +24,7 @@ public interface MovieListActivityContract {
     interface Presenter extends IBasePresenter {
 
         void getGenres();
-        void getMovies();
+        void getMovies(String keyword);
         void searchMovie(String keyword);
         void sortMovieList();
         void getMoviesByGenre(GenreModel genre);
@@ -32,9 +34,9 @@ public interface MovieListActivityContract {
 
     interface View {
 
-        void addMoviesToList(List<MovieBaseModel> movieModels);
+        void addMoviesToList(List<MovieBaseModel> movieBaseModels);
         void loadGenres(List<GenreModel> genreModels);
-        void reloadMovieList(List<MovieBaseModel> movieModels);
+        void reloadMovieList(List<MovieBaseModel> movieBaseModels);
 
         void updateMovieFavoriteUI(MovieBaseModel value);
         void showEmptyListMessage();

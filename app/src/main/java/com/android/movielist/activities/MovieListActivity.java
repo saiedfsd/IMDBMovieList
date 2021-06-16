@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
@@ -19,7 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.movielist.BuildConfig;
 import com.android.movielist.R;
 import com.android.movielist.adapters.GenreListAdapter;
 import com.android.movielist.adapters.MoviesRecyclerAdapter;
@@ -45,8 +43,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
@@ -80,7 +76,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
-    Observable<String> observableQueryText ;
+    Observable<String> observableQueryText;
 
     private IMovieItemActionListener movieItemActionListener = new IMovieItemActionListener() {
         @Override
@@ -100,6 +96,8 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
     };
 
     private boolean filtersIsCollapsed = true;
+    private boolean keywordSearched;
+//    private Lifecycle movieListLifecycle;
     private long PERIOD = 100;
 
     @Override
@@ -132,11 +130,13 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
                         edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                             @Override
                             public boolean onQueryTextSubmit(String query) {
+                                Log.e("fsd","onQueryTextSubmit :" + query);
                                 return false;
                             }
 
                             @Override
                             public boolean onQueryTextChange(String newText) {
+                                Log.e("fsd","onQueryTextChange :" + newText);
                                 if(!emitter.isDisposed()){
                                     emitter.onNext(newText);
                                 }
@@ -145,7 +145,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
                         });
                     }
                 })
-                .debounce(1000, TimeUnit.MILLISECONDS)
+                .debounce(2000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io());
 
         observableQueryText.subscribe(new Observer<String>() {
@@ -156,7 +156,8 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
             @Override
             public void onNext(String s) {
                 Log.e("fsd",s);
-                movieListPresenter.searchMovie(s);
+                keywordSearched = true;
+                movieListPresenter.getMovies(s);
             }
             @Override
             public void onError(Throwable e) {
@@ -165,6 +166,18 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
             @Override
             public void onComplete() {
 
+            }
+        });
+
+        edtSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                Log.e("fsd", "search on close");
+                if (keywordSearched)
+                    movieListPresenter.getMovies("");
+
+                keywordSearched = false;
+                return false;
             }
         });
 
@@ -350,6 +363,13 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
                 }
             });
 
+        btnGenres.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movieListPresenter.getGenres();
+            }
+        });
+
         movieListPresenter.onCreate();
     }
 
@@ -379,44 +399,13 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
         }else{
         }*/
 
-        Observable<Boolean> scrollListen = Observable.create(new ObservableOnSubscribe<Boolean>() {
+        recyclerViewMovie.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                recyclerViewMovie.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                        if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
-                            if (!e.isDisposed()){
-                                e.onNext(true);
-                            }
-                        }
-                    }
-                });
-
-            }
-        }).subscribeOn(Schedulers.single()).subscribeOn(Schedulers.io());
-
-        scrollListen.subscribe(new Observer<Boolean>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                disposables.add(d);
-            }
-
-            @Override
-            public void onNext(Boolean value) {
-                Log.e("fsd",value.toString());
-                movieListPresenter.getMovies();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("fsd",e.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    movieListPresenter.getMovies(edtSearchView.getQuery().equals("")? "":String.valueOf(edtSearchView.getQuery()));
+                }
             }
         });
 
@@ -580,17 +569,18 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
     }
 
     @Override
-    public void addMoviesToList(List<MovieBaseModel> movieModels) {
+    public void addMoviesToList(List<MovieBaseModel> movieBaseModels) {
         initMoviesRecyclerView();
         if (moviesRecyclerAdapter == null) {
-            moviesRecyclerAdapter = new MoviesRecyclerAdapter(movieItemActionListener, this);
+            moviesRecyclerAdapter = new MoviesRecyclerAdapter(movieBaseModels,this,movieItemActionListener);
         }
 
         if (recyclerViewMovie.getAdapter() == null)
             recyclerViewMovie.setAdapter(moviesRecyclerAdapter);
 
 
-        moviesRecyclerAdapter.loadMovies(movieModels);
+        moviesRecyclerAdapter.loadMovies(movieBaseModels);
+//        moviesRecyclerAdapter.submitData(movieListLifecycle,pagingData);
 
     }
 
@@ -600,17 +590,18 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
     }
 
     @Override
-    public void reloadMovieList(List<MovieBaseModel> movieModels) {
+    public void reloadMovieList(List<MovieBaseModel> movieBaseModels) {
         initMoviesRecyclerView();
         if (moviesRecyclerAdapter == null){
-            moviesRecyclerAdapter = new MoviesRecyclerAdapter(movieItemActionListener,this);
-        }else
+            moviesRecyclerAdapter = new MoviesRecyclerAdapter(movieBaseModels,this,movieItemActionListener);
+        }else {
             moviesRecyclerAdapter.removeMovieItems();
-
+        }
         if (recyclerViewMovie.getAdapter() == null)
             recyclerViewMovie.setAdapter(moviesRecyclerAdapter);
 
-        moviesRecyclerAdapter.loadMovies(movieModels);
+        moviesRecyclerAdapter.loadMovies(movieBaseModels);
+//        moviesRecyclerAdapter.submitData(movieListLifecycle,pagingData);
     }
 
     @Override
